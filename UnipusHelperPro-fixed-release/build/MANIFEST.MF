@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Created-By: Maven JAR Plugin 3.3.0
+Build-Jdk-Spec: 25
+Class-Path: lib/flatlaf-3.6.1.jar lib/okhttp-5.0.0-alpha.14.jar lib/okio
+ -jvm-3.9.0.jar lib/kotlin-stdlib-1.9.23.jar lib/annotations-13.0.jar li
+ b/gson-2.12.1.jar lib/error_prone_annotations-2.36.0.jar lib/log4j-api-
+ 2.25.2.jar lib/log4j-core-2.25.2.jar lib/jjwt-api-0.12.5.jar lib/jjwt-i
+ mpl-0.12.5.jar lib/jjwt-gson-0.12.5.jar lib/jsoup-1.21.2.jar lib/rsynta
+ xtextarea-3.6.0.jar
+Main-Class: org.unipus.Main
+

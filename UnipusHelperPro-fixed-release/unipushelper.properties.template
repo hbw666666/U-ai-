@@ -1,0 +1,36 @@
+# ============================================================
+#  UnipusHelperPro configuration
+#
+#  Copy this file to "unipushelper.properties" (same folder as the jar)
+#  and edit the values. The program also creates this file
+#  automatically on first run.
+# ============================================================
+#
+#  Submit pacing -------------------------------------------------
+#
+#  Minimum interval between two submissions, in milliseconds.
+#  Larger = slower but safer, smaller = faster but the server may
+#  answer with "submitting too fast" (code 600001 / 600002).
+#  Default: 20000 (20 seconds).
+#  Do not go below ~10000; the server rejected a 3-second pace.
+submit.minIntervalMs=20000
+#
+#  Extra random jitter added on top of the minimum interval, in
+#  milliseconds. Keeps the rhythm from looking mechanical.
+#  Default: 8000 (0-8 s random).
+submit.jitterMs=8000
+#
+#  Maximum number of submissions inside a rolling 60 second window.
+#  Default: 3.
+submit.maxPerMinute=3
+#
+#  First cooldown after the server reports rate limiting, in ms.
+#  Doubles on every repeated offence. Default: 120000 (2 minutes).
+submit.backoffBaseMs=120000
+#
+#  Upper bound for that cooldown, in ms. Default: 900000 (15 min).
+submit.backoffMaxMs=900000
+#
+#  Reset the backoff if no rate limit happened for this long, in ms.
+#  Default: 600000 (10 minutes).
+submit.backoffResetMs=600000

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 仅在控制台显示 ERROR 及以上 -->
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!-- Pattern 说明：
+                 %d{ISO8601}   -> 时间（ISO8601）
+                 [%t]          -> 线程名
+                 %-5level      -> 日志级别（左对齐宽度5）
+                 [%X{taskId}]  -> ThreadContext 中的 taskId（如果不存在显示为空）
+                 - %msg%n      -> 日志消息与换行
+            -->
+            <PatternLayout pattern="%d{DEFAULT} [%t] %-5level %notEmpty{[%X{taskId}]} : %msg%n%throwable"/>
+        </Console>
+
+        <!-- 文件记录所有级别（由 Root:DEBUG 控制）
+             修复：日志文件名改为按进程区分（${sys:uhp.logfile}，由 Main 在启动时设置成 logs/latest-<pid>.log）。
+             原来固定写 logs/latest.log，一旦重复启动（两个实例同时在跑），
+             后启动的实例会尝试删除/滚动前一个实例仍打开的 latest.log，
+             Windows 上必然失败并报「另一个程序正在使用此文件，进程无法访问」。
+             关闭 OnStartupTriggeringPolicy 是因为按进程命名后每次启动本来就是新文件，无需再滚动。 -->
+        <RollingFile name="File" fileName="${sys:uhp.logfile:-logs/latest.log}" filePattern="logs/app-%d{yyyy-MM-dd}-%i.log.gz" createOnDemand="true">
+            <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger{1} %notEmpty{[%X{taskId}]} : %msg%n%throwable"/>
+            <Policies>
+                <!-- 单个文件达到一定大小时再分割 -->
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root 设为 TRACE：
+             - LogPanel 的程序化 Appender（SwingBroadcastAppender）挂在 Root 上，可收到所有级别
+             - File 也会记录所有级别
+             - Console 通过阈值过滤器限制为 ERROR+ 输出
+        -->
+        <Root level="trace">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
